@@ -27,15 +27,15 @@ import model.Inventory;
  *
  * @author Clint
  */
-public class AddPartController implements Initializable {
+public class ModifyPartController implements Initializable {
     
     private Stage stage;
     private Parent parent;
     private Scene scene;
     
     Inventory imInventory;
-
-    @FXML
+    
+        @FXML
     private HBox hbMachineId;
     @FXML
     private RadioButton rbInHouse;
@@ -64,17 +64,17 @@ public class AddPartController implements Initializable {
     @FXML
     private TextField tbCompanyName;
 
-    AddPartController(Inventory _imInventory) {
-        imInventory = _imInventory;
-    }
-
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        // TODO
     }    
+    
+    ModifyPartController(Inventory _imInventory) {
+        imInventory = _imInventory;
+    }
 
     @FXML
     private void onAction_InHouse(ActionEvent event) {
@@ -104,7 +104,7 @@ public class AddPartController implements Initializable {
     @FXML
     private void onActionSave(ActionEvent event) {
     }
-
+    
     @FXML
     private void tbMachineId(ActionEvent event) {
     }

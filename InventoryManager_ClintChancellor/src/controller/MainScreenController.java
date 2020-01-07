@@ -44,17 +44,16 @@ import model.Product;
 public class MainScreenController implements Initializable {
     
     private Stage stage;
-    private Parent scene;
+    private Parent parent;
+    private Scene scene;
     private boolean partSearched, productSearched = false;
     
     private ObservableList<Part> partInventory = FXCollections.observableArrayList();
     private ObservableList<Product> productInventory = FXCollections.observableArrayList();
     private ObservableList<Part> partInventorySearch = FXCollections.observableArrayList();
     private ObservableList<Product> productInventorySearch = FXCollections.observableArrayList();
-    ArrayList<Integer> partIdList;
-    ArrayList<Integer> productIdList;
     
-    Inventory inventory;
+    Inventory imInventory;
     
 
     @FXML
@@ -102,8 +101,9 @@ public class MainScreenController implements Initializable {
     @FXML
     private Button btnProductDelete;
 
-    public MainScreenController(Inventory imInventory) {
+    public MainScreenController(Inventory _imInventory) {
         System.out.println("In MainScreenController");
+        imInventory = _imInventory;
         partInventory = imInventory.getAllParts();
         productInventory = imInventory.getAllProducts();
 
@@ -161,17 +161,28 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionPartAdd(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();       
-        scene = FXMLLoader.load(getClass().getResource("/view/im_addPart.fxml"));
-        stage.setScene(new Scene(scene));
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPart.fxml"));
+        controller.AddPartController addPartController = new controller.AddPartController(imInventory);
+        loader.setController(addPartController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
     @FXML
     private void onActionPartModify(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();       
-        scene = FXMLLoader.load(getClass().getResource("/view/im_modifyPart.fxml"));
-        stage.setScene(new Scene(scene));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPart.fxml"));
+        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory);
+        loader.setController(modifyPartController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -203,17 +214,27 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionProductAdd(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();       
-        scene = FXMLLoader.load(getClass().getResource("/view/im_addProduct.fxml"));
-        stage.setScene(new Scene(scene));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddProduct.fxml"));
+        controller.AddProductController addProductController = new controller.AddProductController(imInventory);
+        loader.setController(addProductController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
     @FXML
     private void onActionProductModify(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();       
-        scene = FXMLLoader.load(getClass().getResource("/view/im_modifyProduct.fxml"));
-        stage.setScene(new Scene(scene));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProduct.fxml"));
+        controller.ModifyProductController modifyProductController = new controller.ModifyProductController(imInventory);
+        loader.setController(modifyProductController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

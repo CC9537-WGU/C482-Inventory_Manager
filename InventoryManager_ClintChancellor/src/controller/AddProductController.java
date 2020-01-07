@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Inventory;
 
 /**
  * FXML Controller class
@@ -27,7 +28,9 @@ import javafx.stage.Stage;
 public class AddProductController implements Initializable {
     
     private Stage stage;
-    private Parent scene;
+    private Parent parent;
+    private Scene scene;
+    Inventory imInventory;
 
     @FXML
     private TextField tbProductId;
@@ -58,6 +61,10 @@ public class AddProductController implements Initializable {
     @FXML
     private Button btnCancel;
 
+    AddProductController(Inventory _imInventory) {
+        imInventory = _imInventory;
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -84,9 +91,14 @@ public class AddProductController implements Initializable {
 
     @FXML
     private void onActionCancel(ActionEvent event) throws IOException {
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();       
-        scene = FXMLLoader.load(getClass().getResource("/view/im_main.fxml"));
-        stage.setScene(new Scene(scene));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
+        loader.setController(mainScreenController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
     

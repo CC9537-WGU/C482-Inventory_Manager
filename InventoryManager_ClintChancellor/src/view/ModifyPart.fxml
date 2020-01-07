@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.231" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox id="hboxInHouse" fx:id="hbMachineId" layoutX="50.0" layoutY="300.0">
          <children>
@@ -121,7 +121,7 @@
                               <Insets right="25.0" top="5.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="partInvTxt">
+                        <TextField fx:id="tbInv">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -213,7 +213,7 @@
                   <Insets right="25.0" top="5.0" />
                </HBox.margin>
             </Label>
-            <TextField fx:id="tbCompanyName">
+            <TextField fx:id="tbCompanyName" onAction="#tbMachineId">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
