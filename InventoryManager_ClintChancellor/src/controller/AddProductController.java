@@ -19,6 +19,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Inventory;
+import model.Product;
 
 /**
  * FXML Controller class
@@ -31,6 +32,8 @@ public class AddProductController implements Initializable {
     private Parent parent;
     private Scene scene;
     Inventory imInventory;
+    Product newProduct;
+
 
     @FXML
     private TextField tbProductId;
@@ -70,7 +73,7 @@ public class AddProductController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        tbProductId.setText(Integer.toString(newProduct.getNextProductId()));
     }    
 
     @FXML

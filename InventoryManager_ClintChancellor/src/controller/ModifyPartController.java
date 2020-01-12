@@ -21,6 +21,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Inventory;
+import model.Part;
 
 /**
  * FXML Controller class
@@ -72,7 +73,7 @@ public class ModifyPartController implements Initializable {
         // TODO
     }    
     
-    ModifyPartController(Inventory _imInventory) {
+    ModifyPartController(Inventory _imInventory, Part _partToModify) {
         imInventory = _imInventory;
     }
 

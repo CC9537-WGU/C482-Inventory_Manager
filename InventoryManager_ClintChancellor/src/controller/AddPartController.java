@@ -21,6 +21,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Inventory;
+import model.Part;
 
 /**
  * FXML Controller class
@@ -34,6 +35,7 @@ public class AddPartController implements Initializable {
     private Scene scene;
     
     Inventory imInventory;
+    Part newPart;
 
     @FXML
     private HBox hbMachineId;
@@ -73,7 +75,7 @@ public class AddPartController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        tbId.setText(Integer.toString(newPart.getNextPartId()));
     }    
 
     @FXML

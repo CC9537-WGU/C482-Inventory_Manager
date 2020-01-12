@@ -15,6 +15,9 @@ public class Product {
     private String name;
     double price;
     
+    // Class Variables
+    static int productCount = 10000;
+    
     // Constructor
     public Product(int _id, String _name, double _price, int _stock, int _min, int _max) {
         this.id = _id;
@@ -23,6 +26,18 @@ public class Product {
         this.stock = _stock;
         this.min = _min;
         this.max = _max;
+        productCount++;
+    }
+    
+    // Overloaded Constructor - excludes id and autoincrements to next id.
+    public Product(String _name, double _price, int _stock, int _min, int _max) {
+        this.id = getNextProductId();
+        this.name = _name;
+        this.price = _price;
+        this.stock = _stock;
+        this.min = _min;
+        this.max = _max;
+        productCount++;
     }
     
     // Setters for all private members
@@ -86,6 +101,11 @@ public class Product {
     
     public ObservableList<Part> getAllAssociatedParts() {
         return associatedParts;
+    }
+    
+    // Class Methods
+    public static int getNextProductId() {
+        return productCount;
     }
     
 }

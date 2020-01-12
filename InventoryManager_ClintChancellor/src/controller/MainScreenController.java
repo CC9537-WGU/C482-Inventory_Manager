@@ -161,7 +161,6 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionPartAdd(ActionEvent event) throws IOException {
-        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AddPart.fxml"));
         controller.AddPartController addPartController = new controller.AddPartController(imInventory);
         loader.setController(addPartController);
@@ -175,8 +174,9 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionPartModify(ActionEvent event) throws IOException {
+        Part partToModify = tvPartsTable.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPart.fxml"));
-        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory);
+        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory, partToModify);
         loader.setController(modifyPartController);
         parent = loader.load();
         scene = new Scene(parent);
