@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -22,6 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Inventory;
 import model.Part;
+import model.InHouse;
+import model.Outsourced;
 
 /**
  * FXML Controller class
@@ -37,12 +40,14 @@ public class AddPartController implements Initializable {
     Inventory imInventory;
     Part newPart;
 
-    @FXML
-    private HBox hbMachineId;
+//    @FXML
+//    private HBox hbMachineId;
+//    @FXML
+//    private TextField tbMachineId;
     @FXML
     private RadioButton rbInHouse;
     @FXML
-    private ToggleGroup rb_inHouse_outSourcedrb_inHouse_outSourced;
+    private ToggleGroup rb_inHouse_outSourced;
     @FXML
     private RadioButton rbOutSourced;
     @FXML
@@ -61,10 +66,14 @@ public class AddPartController implements Initializable {
     private Button btnCancel;
     @FXML
     private Button btnSave;
+//    @FXML
+//    private HBox hbCompanyName;
+//    @FXML
+//    private TextField tbCompanyName;
     @FXML
-    private HBox hbCompanyName;
+    private Label swapInhouseOutsourced;
     @FXML
-    private TextField tbCompanyName;
+    private TextField tbInhouseOutsourced;
 
     AddPartController(Inventory _imInventory) {
         imInventory = _imInventory;
@@ -80,14 +89,12 @@ public class AddPartController implements Initializable {
 
     @FXML
     private void onAction_InHouse(ActionEvent event) {
-        hbCompanyName.setVisible(false);
-        hbMachineId.setVisible(true);
+        swapInhouseOutsourced.setText("Machine ID");
     }
 
     @FXML
     private void onAction_Outsourced(ActionEvent event) {
-        hbMachineId.setVisible(false);
-        hbCompanyName.setVisible(true);
+        swapInhouseOutsourced.setText("Company Name");
     }
 
     @FXML
@@ -104,7 +111,35 @@ public class AddPartController implements Initializable {
     }
 
     @FXML
-    private void onActionSave(ActionEvent event) {
+    private void onActionSave(ActionEvent event) throws IOException {
+        String newPartName = tbName.getText();
+        int newPartStock = Integer.valueOf(tbInv.getText());
+        double newPartPrice = Double.valueOf(tbPriceCost.getText());
+        int newPartMax = Integer.valueOf(tbMax.getText());
+        int newPartMin = Integer.valueOf(tbMin.getText());
+        
+        if (rbInHouse.isSelected()) {
+            int newPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
+            newPart = new InHouse(newPartName, newPartPrice, newPartStock, newPartMin, newPartMax, newPartMachineId);
+            imInventory.addPart(newPart);
+        }
+        
+        if (rbOutSourced.isSelected()) {
+            String newPartCompanyName = tbInhouseOutsourced.getText();
+            newPart = new Outsourced(newPartName, newPartPrice, newPartStock, newPartMin, newPartMax, newPartCompanyName);
+            imInventory.addPart(newPart);
+        }
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+        controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
+        loader.setController(mainScreenController);
+        parent = loader.load();
+        scene = new Scene(parent);
+        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        
     }
 
     @FXML

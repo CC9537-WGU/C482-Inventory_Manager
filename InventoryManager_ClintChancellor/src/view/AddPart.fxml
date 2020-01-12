@@ -13,7 +13,7 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.231" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox id="hboxInHouse" fx:id="hbMachineId" layoutX="50.0" layoutY="300.0">
+<!--      <HBox id="hboxInHouse" fx:id="hbMachineId" layoutX="50.0" layoutY="300.0">
          <children>
             <Label minWidth="60.0" text="Machine ID">
                <HBox.margin>
@@ -26,7 +26,7 @@
                </HBox.margin>
             </TextField>
          </children>
-      </HBox>
+      </HBox>-->
       <HBox alignment="CENTER_LEFT" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER">
@@ -53,10 +53,10 @@
                                        <children>
                                           <RadioButton id="rb_inHouse_outSourced" fx:id="rbInHouse" alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#onAction_InHouse" selected="true" text="In-House">
                                              <toggleGroup>
-                                                <ToggleGroup fx:id="rb_inHouse_outSourcedrb_inHouse_outSourced" />
+                                                <ToggleGroup fx:id="rb_inHouse_outSourced" />
                                              </toggleGroup>
                                           </RadioButton>
-                                          <RadioButton id="rb_inHouse_outSourced" fx:id="rbOutSourced" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onAction_Outsourced" text="Outsourced" toggleGroup="$rb_inHouse_outSourcedrb_inHouse_outSourced">
+                                          <RadioButton id="rb_inHouse_outSourced" fx:id="rbOutSourced" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#onAction_Outsourced" text="Outsourced" toggleGroup="$rb_inHouse_outSourced">
                                              <HBox.margin>
                                                 <Insets left="20.0" />
                                              </HBox.margin>
@@ -206,14 +206,14 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
-      <HBox id="hboxOutsourced" fx:id="hbCompanyName" layoutX="50.0" layoutY="300.0" visible="false">
+      <HBox id="hboxswapInhouseOutsourced" fx:id="hbswapInhouseOutsourced" layoutX="50.0" layoutY="300.0">
          <children>
-            <Label minWidth="60.0" text="Company Name">
+            <Label id="swapInhouseOutsourced" fx:id="swapInhouseOutsourced" minWidth="60.0" text="Machine ID">
                <HBox.margin>
                   <Insets right="25.0" top="5.0" />
                </HBox.margin>
             </Label>
-            <TextField fx:id="tbCompanyName" onAction="#tbMachineId">
+            <TextField fx:id="tbInhouseOutsourced">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>

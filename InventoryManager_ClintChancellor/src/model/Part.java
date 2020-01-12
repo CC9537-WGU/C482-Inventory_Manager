@@ -13,19 +13,8 @@ public abstract class Part {
     
     // Class Variables
     static int partCount = 100;
-    
-    // Constructor
-    public Part(int _id, String _name, double _price, int _stock, int _min, int _max ) {
-        this.id = _id;
-        this.name = _name;
-        this.price = _price;
-        this.stock = _stock;
-        this.min = _min;
-        this.max = _max;
-        partCount++;
-    }
-    
-    // Overloaded Constructor - excludes id and autoincrements to next id.
+     
+    // Constructor - excludes id and autoincrements to next id.
     public Part(String _name, double _price, int _stock, int _min, int _max ) {
         this.id = getNextPartId();
         this.name = _name;

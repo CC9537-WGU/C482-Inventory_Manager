@@ -8,14 +8,8 @@ public class InHouse extends Part {
     
     // Private Members
     private int machineId;
-    
-    // Constructor
-    public InHouse(int _id, String _name, double _price, int _stock, int _min, int _max, int _machineId) {
-        super(_id, _name, _price, _stock, _min, _max);
-        this.machineId = _machineId;
-    }
-    
-    // Overloaded Constructor
+       
+    // Constructor - excludes id and autoincrements to next id.
     public InHouse(String _name, double _price, int _stock, int _min, int _max, int _machineId) {
         super(_name, _price, _stock, _min, _max);
         this.machineId = _machineId;
