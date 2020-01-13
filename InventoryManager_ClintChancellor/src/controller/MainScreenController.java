@@ -174,9 +174,10 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionPartModify(ActionEvent event) throws IOException {
+        int partToModifyIndex = tvPartsTable.getSelectionModel().getSelectedIndex();
         Part partToModify = tvPartsTable.getSelectionModel().getSelectedItem();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPart.fxml"));
-        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory, partToModify);
+        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory, partToModify, partToModifyIndex);
         loader.setController(modifyPartController);
         parent = loader.load();
         scene = new Scene(parent);

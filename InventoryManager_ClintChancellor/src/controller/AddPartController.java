@@ -18,8 +18,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Inventory;
 import model.Part;
@@ -40,14 +38,8 @@ public class AddPartController implements Initializable {
     Inventory imInventory;
     Part newPart;
 
-//    @FXML
-//    private HBox hbMachineId;
-//    @FXML
-//    private TextField tbMachineId;
     @FXML
     private RadioButton rbInHouse;
-    @FXML
-    private ToggleGroup rb_inHouse_outSourced;
     @FXML
     private RadioButton rbOutSourced;
     @FXML
@@ -62,14 +54,6 @@ public class AddPartController implements Initializable {
     private TextField tbMax;
     @FXML
     private TextField tbMin;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnSave;
-//    @FXML
-//    private HBox hbCompanyName;
-//    @FXML
-//    private TextField tbCompanyName;
     @FXML
     private Label swapInhouseOutsourced;
     @FXML
@@ -142,8 +126,5 @@ public class AddPartController implements Initializable {
         
     }
 
-    @FXML
-    private void tbMachineId(ActionEvent event) {
-    }
     
 }
