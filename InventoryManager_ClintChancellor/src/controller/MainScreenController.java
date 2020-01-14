@@ -42,19 +42,18 @@ import model.Product;
  * @author Clint
  */
 public class MainScreenController implements Initializable {
-    
+
     private Stage stage;
     private Parent parent;
     private Scene scene;
     private boolean partSearched, productSearched = false;
-    
+
     private ObservableList<Part> partInventory = FXCollections.observableArrayList();
     private ObservableList<Product> productInventory = FXCollections.observableArrayList();
     private ObservableList<Part> partInventorySearch = FXCollections.observableArrayList();
     private ObservableList<Product> productInventorySearch = FXCollections.observableArrayList();
-    
+
     Inventory imInventory;
-    
 
     @FXML
     private AnchorPane im_main;
@@ -102,7 +101,6 @@ public class MainScreenController implements Initializable {
     private Button btnProductDelete;
 
     public MainScreenController(Inventory _imInventory) {
-        System.out.println("In MainScreenController");
         imInventory = _imInventory;
         partInventory = imInventory.getAllParts();
         productInventory = imInventory.getAllProducts();
@@ -111,32 +109,31 @@ public class MainScreenController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("In initialize");
-        
         //Table and columns for Parts
         tvcPartId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tvcPartName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tvcPartStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         tvcPartPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
+
         tvPartsTable.setItems(partInventory);
         tvPartsTable.refresh();
-        
+
         //Table and columns for Products
         tvcProductId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tvcProductName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tvcProductStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         tvcProductPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        
+
         tvProductsTable.setItems(productInventory);
         tvProductsTable.refresh();
-        
-    }    
+
+    }
 
     @FXML
     private void onActionExit(ActionEvent event) {
@@ -147,16 +144,18 @@ public class MainScreenController implements Initializable {
     private void onActionPartSearch(ActionEvent event) {
         if (!partSearched) {
             partSearched = true;
-            //ToDo: Implement Search Functionality
-            System.out.println("ToDo: Implement Search Functionality");
+            partInventorySearch = imInventory.lookupPart(tbPartSearch.getText());
+            tvPartsTable.setItems(partInventorySearch);
+            tvPartsTable.refresh();
             btnPartSearch.setText("Clear");
-        } else
-        {
+        } else {
             partSearched = false;
             tbPartSearch.setText("");
             btnPartSearch.setText("Search");
+            tvPartsTable.setItems(partInventory);
+            tvPartsTable.refresh();
         }
-        
+
     }
 
     @FXML
@@ -166,7 +165,7 @@ public class MainScreenController implements Initializable {
         loader.setController(addPartController);
         parent = loader.load();
         scene = new Scene(parent);
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -181,7 +180,7 @@ public class MainScreenController implements Initializable {
         loader.setController(modifyPartController);
         parent = loader.load();
         scene = new Scene(parent);
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -189,27 +188,34 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionPartDelete(ActionEvent event) {
-        Alert confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this part?", ButtonType.YES, ButtonType.NO);
-        confirmDelete.setTitle("Confirm Part Deletion");
-        confirmDelete.showAndWait().filter(response -> response == ButtonType.YES).ifPresent(response -> {
-            Part selectedPart = (Part) tvPartsTable.getSelectionModel().getSelectedItem();
-            //ToDo: Implement DeletePart
-            System.out.println("ToDo: Implement DeletePart");
-        });
+        Part selectedPart = (Part) tvPartsTable.getSelectionModel().getSelectedItem();
+        if (selectedPart != null) {
+            Alert confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this part?", ButtonType.YES, ButtonType.NO);
+            confirmDelete.setTitle("Confirm Part Deletion");
+            confirmDelete.showAndWait().filter(response -> response == ButtonType.YES).ifPresent(response -> {
+                imInventory.deletePart(selectedPart);
+            });
+        } else {
+            Alert noPartSelected = new Alert(AlertType.ERROR, "No part selected. Please select a part to delete.", ButtonType.OK);
+            noPartSelected.setTitle("Error - No Part Selected");
+            noPartSelected.showAndWait();
+        };
     }
 
     @FXML
     private void onActionProductSearch(ActionEvent event) {
         if (!productSearched) {
             productSearched = true;
-            //ToDo: Implement Search Functionality
-            System.out.println("ToDo: Implement Search Functionality");
+            productInventorySearch = imInventory.lookupProduct(tbProductSearch.getText());
+            tvProductsTable.setItems(productInventorySearch);
+            tvProductsTable.refresh();
             btnProductSearch.setText("Clear");
-        } else
-        {
+        } else {
             productSearched = false;
             tbProductSearch.setText("");
             btnProductSearch.setText("Search");
+            tvProductsTable.setItems(productInventory);
+            tvProductsTable.refresh();
         }
     }
 
@@ -220,7 +226,7 @@ public class MainScreenController implements Initializable {
         loader.setController(addProductController);
         parent = loader.load();
         scene = new Scene(parent);
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -233,7 +239,7 @@ public class MainScreenController implements Initializable {
         loader.setController(modifyProductController);
         parent = loader.load();
         scene = new Scene(parent);
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -241,13 +247,18 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionProductDelete(ActionEvent event) {
-        Alert confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this product?", ButtonType.YES, ButtonType.NO);
-        confirmDelete.setTitle("Confirm Product Deletion");
-        confirmDelete.showAndWait().filter(response -> response == ButtonType.YES).ifPresent(response -> {
-            Product selectedProduct = (Product) tvProductsTable.getSelectionModel().getSelectedItem();
-            //ToDo: Implement DeletePart
-            System.out.println("ToDo: Implement DeletePart");
-        });
+        Product selectedProduct = (Product) tvProductsTable.getSelectionModel().getSelectedItem();
+        if (selectedProduct != null) {
+            Alert confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this product?", ButtonType.YES, ButtonType.NO);
+            confirmDelete.setTitle("Confirm Product Deletion");
+            confirmDelete.showAndWait().filter(response -> response == ButtonType.YES).ifPresent(response -> {
+                imInventory.deleteProduct(selectedProduct);
+            });
+        } else {
+            Alert noProductSelected = new Alert(AlertType.ERROR, "No product selected. Please select a product to delete.", ButtonType.OK);
+            noProductSelected.setTitle("Error - No Product Selected");
+            noProductSelected.showAndWait();
+        };
     }
-    
+
 }

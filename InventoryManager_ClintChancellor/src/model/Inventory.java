@@ -42,7 +42,7 @@ public class Inventory {
     
     public ObservableList<Part> lookupPart(String _partName) {
         ObservableList<Part> matchingParts = FXCollections.observableArrayList();
-        getAllParts().stream().filter((part) -> (part.getName().contains(_partName))).forEachOrdered((part) -> {
+        getAllParts().stream().filter((part) -> (part.getName().toLowerCase().contains(_partName.toLowerCase()))).forEachOrdered((part) -> {
             matchingParts.add(part);
         });
         return matchingParts;
@@ -50,7 +50,7 @@ public class Inventory {
     
     public ObservableList<Product> lookupProduct(String _productName) {
         ObservableList<Product> matchingProducts = FXCollections.observableArrayList();
-        getAllProducts().stream().filter((product) -> (product.getName().contains(_productName))).forEachOrdered((product) -> {
+        getAllProducts().stream().filter((product) -> (product.getName().toLowerCase().contains(_productName.toLowerCase()))).forEachOrdered((product) -> {
             matchingProducts.add(product);
         });
         return matchingProducts;
