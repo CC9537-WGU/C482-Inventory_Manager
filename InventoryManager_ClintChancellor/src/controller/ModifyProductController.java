@@ -119,6 +119,9 @@ public class ModifyProductController implements Initializable {
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -185,7 +188,7 @@ public class ModifyProductController implements Initializable {
             Alert noPartSelected = new Alert(Alert.AlertType.ERROR, "No part selected. Please select a part to delete.", ButtonType.OK);
             noPartSelected.setTitle("Error - No Part Selected");
             noPartSelected.showAndWait();
-        };
+        }
     }
 
     @FXML
@@ -197,13 +200,17 @@ public class ModifyProductController implements Initializable {
         int modifyProductMin = Integer.valueOf(tbProductMin.getText());
         ObservableList<Part> modifyProductParts = tvProductPartsTable.getItems();
 
-        productToModify.setName(modifyProductName);
-        productToModify.setStock(modifyProductStock);
-        productToModify.setPrice(modifyProductPrice);
-        productToModify.setMin(modifyProductMin);
-        productToModify.setMax(modifyProductMax);
+        if (isProductValid(productToModify)) {
+            productToModify.setName(modifyProductName);
+            productToModify.setStock(modifyProductStock);
+            productToModify.setPrice(modifyProductPrice);
+            productToModify.setMin(modifyProductMin);
+            productToModify.setMax(modifyProductMax);
 
-        productToModify.setAssociatedParts(modifyProductParts);
+            productToModify.setAssociatedParts(modifyProductParts);
+        } else {
+            return;
+        }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
         controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
@@ -235,6 +242,58 @@ public class ModifyProductController implements Initializable {
                 Logger.getLogger(AddProductController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+    }
+
+    private boolean isProductValid(Product _checkProduct) {
+        String _name = _checkProduct.getName();
+        Double _price = _checkProduct.getPrice();
+        int _stock = _checkProduct.getStock();
+        int _min = _checkProduct.getMin();
+        int _max = _checkProduct.getMax();
+        int _associatedPartCount = _checkProduct.getAllAssociatedParts().size();
+
+        if (_name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Name can't be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock < _min)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be less than minimum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock > _max)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be more than maximum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ("0.0".equals(_price.toString())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not be 0 or blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if (_min > _max) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not be greater than Max.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if (_associatedPartCount == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Product must have at least one part.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 
 }

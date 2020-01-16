@@ -103,33 +103,123 @@ public class AddPartController implements Initializable {
     @FXML
     private void onActionSave(ActionEvent event) throws IOException {
         String newPartName = tbName.getText();
-        int newPartStock = Integer.valueOf(tbInv.getText());
-        double newPartPrice = Double.valueOf(tbPriceCost.getText());
-        int newPartMax = Integer.valueOf(tbMax.getText());
-        int newPartMin = Integer.valueOf(tbMin.getText());
+
+        int newPartStock = 0;
+        try {
+            newPartStock = Integer.valueOf(tbInv.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+
+        Double newPartPrice = 0.00;
+        try {
+            newPartPrice = Double.valueOf(tbPriceCost.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+
+        int newPartMax = 0;
+        try {
+            newPartMax = Integer.valueOf(tbMax.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Max can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+
+        int newPartMin = 0;
+        try {
+            newPartMin = Integer.valueOf(tbMin.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
 
         if (rbInHouse.isSelected()) {
-            int newPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
-            newPart = new InHouse(newPartName, newPartPrice, newPartStock, newPartMin, newPartMax, newPartMachineId);
-            imInventory.addPart(newPart);
+            try {
+                int newPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
+                newPart = new InHouse(newPartName, newPartPrice, newPartStock, newPartMin, newPartMax, newPartMachineId);
+            } catch (NumberFormatException numberFormatException) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Machine ID can not contain characters or be blank.", ButtonType.OK);
+                alert.setTitle("Error - Part Invalid");
+                alert.showAndWait();
+                return;
+            }
         }
 
         if (rbOutSourced.isSelected()) {
             String newPartCompanyName = tbInhouseOutsourced.getText();
             newPart = new Outsourced(newPartName, newPartPrice, newPartStock, newPartMin, newPartMax, newPartCompanyName);
-            imInventory.addPart(newPart);
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
-        controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
-        loader.setController(mainScreenController);
-        parent = loader.load();
-        scene = new Scene(parent);
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+        if (isPartValid(newPart)) {
+            imInventory.addPart(newPart);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
+            controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
+            loader.setController(mainScreenController);
+            parent = loader.load();
+            scene = new Scene(parent);
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } else {
+            return;
+        }
 
+    }
+
+    private boolean isPartValid(Part _checkPart) {
+        String _name = _checkPart.getName();
+        Double _price = _checkPart.getPrice();
+        int _stock = _checkPart.getStock();
+        int _min = _checkPart.getMin();
+        int _max = _checkPart.getMax();
+
+        if (_name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Name can't be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock < _min)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be less than minimum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock > _max)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be more than maximum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ("0.0".equals(_price.toString())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not be 0 or blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+        
+        if (_min > _max) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not be greater than Max.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 
 }

@@ -30,20 +30,19 @@ import model.Part;
 import model.Product;
 
 public class AddProductController implements Initializable {
-    
+
     private Stage stage;
     private Parent parent;
     private Scene scene;
     Inventory imInventory;
     Product newProduct;
     boolean partSearched;
-    
+
     private ObservableList<Part> partInventory = FXCollections.observableArrayList();
     private ObservableList<Part> partInventorySearch = FXCollections.observableArrayList();
     private ObservableList<Part> productParts = FXCollections.observableArrayList();
 
-
-@FXML
+    @FXML
     private TextField tbProductId;
 
     @FXML
@@ -120,7 +119,7 @@ public class AddProductController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tbProductId.setText(Integer.toString(newProduct.getNextProductId()));
-        
+
         //Table and columns for Parts
         tvcPartsId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tvcPartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -129,7 +128,7 @@ public class AddProductController implements Initializable {
 
         tvPartsTable.setItems(partInventory);
         tvPartsTable.refresh();
-        
+
         //Table and columns for PartsInProduct
         tvcProductsPartsId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tvcProductsPartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -138,7 +137,7 @@ public class AddProductController implements Initializable {
 
         tvProductPartsTable.setItems(productParts);
         tvProductPartsTable.refresh();
-    }    
+    }
 
     @FXML
     private void onActionPartSearch(ActionEvent event) {
@@ -172,21 +171,63 @@ public class AddProductController implements Initializable {
     @FXML
     private void onActionSave(ActionEvent event) throws IOException {
         String newProductName = tbProductName.getText();
-        int newProductStock = Integer.valueOf(tbProductInv.getText());
-        double newProductPrice = Double.valueOf(tbProductPriceCost.getText());
-        int newProductMax = Integer.valueOf(tbProductMax.getText());
-        int newProductMin = Integer.valueOf(tbProductMin.getText());
+        int newProductStock = 0;
+        try {
+            newProductStock = Integer.valueOf(tbProductInv.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
         
+        double newProductPrice = 0;
+        try {
+            newProductPrice = Double.valueOf(tbProductPriceCost.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+        
+        int newProductMax = 0;
+        try {
+            newProductMax = Integer.valueOf(tbProductMax.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Max can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+        
+        int newProductMin = 0;
+        try {
+            newProductMin = Integer.valueOf(tbProductMin.getText());
+        } catch (NumberFormatException numberFormatException) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not contain characters or be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return;
+        }
+
         newProduct = new Product(newProductName, newProductPrice, newProductStock, newProductMin, newProductMax);
-        tvProductPartsTable.getItems().forEach(part -> {newProduct.addAssociatedPart(part);});
-        imInventory.addProduct(newProduct);
-        
+        tvProductPartsTable.getItems().forEach(part -> {
+            newProduct.addAssociatedPart(part);
+        });
+
+        if (isProductValid(newProduct)) {
+            imInventory.addProduct(newProduct);
+        } else {
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainScreen.fxml"));
         controller.MainScreenController mainScreenController = new controller.MainScreenController(imInventory);
         loader.setController(mainScreenController);
         parent = loader.load();
         scene = new Scene(parent);
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
@@ -212,5 +253,57 @@ public class AddProductController implements Initializable {
             }
         });
     }
-    
+
+    private boolean isProductValid(Product _checkProduct) {
+        String _name = _checkProduct.getName();
+        Double _price = _checkProduct.getPrice();
+        int _stock = _checkProduct.getStock();
+        int _min = _checkProduct.getMin();
+        int _max = _checkProduct.getMax();
+        int _associatedPartCount = _checkProduct.getAllAssociatedParts().size();
+
+        if (_name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Name can't be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock < _min)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be less than minimum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock > _max)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be more than maximum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ("0.0".equals(_price.toString())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not be 0 or blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if (_min > _max) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not be greater than Max.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if (_associatedPartCount == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Product must have at least one part.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
 }

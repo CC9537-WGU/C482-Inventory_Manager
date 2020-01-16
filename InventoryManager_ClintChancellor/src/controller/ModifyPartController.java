@@ -140,14 +140,30 @@ public class ModifyPartController implements Initializable {
         if (rbInHouse.isSelected()) {
             if (modifyPart instanceof Outsourced) // Changed from Outsourced to In-House
             {
-                int modifyPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
+                int modifyPartMachineId = 0;
+                try {
+                    modifyPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
+                } catch (NumberFormatException numberFormatException) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Machine ID can not contain characters or be blank.", ButtonType.OK);
+                    alert.setTitle("Error - Part Invalid");
+                    alert.showAndWait();
+                    return;
+                }
                 imInventory.deletePart(modifyPart);
                 Part changedPartType = new InHouse(modifyPartId, modifyPartName, modifyPartPrice, modifyPartStock, modifyPartMin, modifyPartMax, modifyPartMachineId);
-                imInventory.addPart(changedPartType);
+                if (isPartValid(changedPartType)) {
+                    imInventory.addPart(changedPartType);
+                } else {
+                    return;
+                }
             } else { // Was In-house Still In-House
                 int modifyPartMachineId = Integer.valueOf(tbInhouseOutsourced.getText());
                 ((InHouse) modifyPart).setMachineId(modifyPartMachineId);
-                imInventory.updatePart(partToModifyIndex, modifyPart);
+                if (isPartValid(modifyPart)) {
+                    imInventory.updatePart(partToModifyIndex, modifyPart);
+                } else {
+                    return;
+                }
             }
         }
 
@@ -157,12 +173,20 @@ public class ModifyPartController implements Initializable {
                 String modifyPartCompanyName = tbInhouseOutsourced.getText();
                 imInventory.deletePart(modifyPart);
                 Part changedPartType = new Outsourced(modifyPartId, modifyPartName, modifyPartPrice, modifyPartStock, modifyPartMin, modifyPartMax, modifyPartCompanyName);
-                imInventory.addPart(changedPartType);
+                if (isPartValid(changedPartType)) {
+                    imInventory.addPart(changedPartType);
+                } else {
+                    return;
+                }
             } else // Was OutSourced Still Outsourced
             {
                 String modifyPartCompanyName = tbInhouseOutsourced.getText();
                 ((Outsourced) modifyPart).setCompanyName(modifyPartCompanyName);
-                imInventory.updatePart(partToModifyIndex, modifyPart);
+                if (isPartValid(modifyPart)) {
+                    imInventory.updatePart(partToModifyIndex, modifyPart);
+                } else {
+                    return;
+                }
             }
         }
 
@@ -175,6 +199,50 @@ public class ModifyPartController implements Initializable {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+    }
+
+    private boolean isPartValid(Part _checkPart) {
+        String _name = _checkPart.getName();
+        Double _price = _checkPart.getPrice();
+        int _stock = _checkPart.getStock();
+        int _min = _checkPart.getMin();
+        int _max = _checkPart.getMax();
+
+        if (_name.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Name can't be blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock < _min)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be less than minimum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ((_stock > _max)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stock/Inventory can not be more than maximum.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if ("0.0".equals(_price.toString())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Price can not be 0 or blank.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+
+        if (_min > _max) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Min can not be greater than Max.", ButtonType.OK);
+            alert.setTitle("Error - Part Invalid");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
     }
 
 }

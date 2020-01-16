@@ -211,14 +211,14 @@ public class MainScreenController implements Initializable {
             tvProductsTable.setItems(productInventorySearch);
             tvProductsTable.refresh();
             btnProductSearch.setText("Clear");
-            btnProductSearch.setDisable(true);
+            tbProductSearch.setDisable(true);
         } else {
             productSearched = false;
             tbProductSearch.setText("");
             btnProductSearch.setText("Search");
             tvProductsTable.setItems(productInventory);
             tvProductsTable.refresh();
-            btnProductSearch.setDisable(false);
+            tbProductSearch.setDisable(false);
         }
     }
 
