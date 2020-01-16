@@ -164,10 +164,10 @@
                                  <children>
                                     <TableView id="tableParts" fx:id="tvPartsTable" HBox.hgrow="ALWAYS">
                                        <columns>
-                                          <TableColumn maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Part ID" />
-                                          <TableColumn maxWidth="-1.0" minWidth="210.0" prefWidth="-1.0" text="Part Name" />
-                                          <TableColumn maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Inventory Level" />
-                                          <TableColumn maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="Price/Cost Per Unit" />
+                                          <TableColumn fx:id="tvcPartsId" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Part ID" />
+                                          <TableColumn fx:id="tvcPartsName" maxWidth="-1.0" minWidth="210.0" prefWidth="-1.0" text="Part Name" />
+                                          <TableColumn fx:id="tvcPartsInv" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Inventory Level" />
+                                          <TableColumn fx:id="tvcPartsCost" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="Price/Cost Per Unit" />
                                        </columns>
                                     </TableView>
                                  </children>
@@ -196,12 +196,12 @@
                            <children>
                               <HBox VBox.vgrow="ALWAYS">
                                  <children>
-                                    <TableView id="tableProducts" fx:id="tvProductTable" HBox.hgrow="ALWAYS">
+                                    <TableView id="tableProductsParts" fx:id="tvProductPartsTable" HBox.hgrow="ALWAYS">
                                        <columns>
-                                          <TableColumn maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Product ID" />
-                                          <TableColumn maxWidth="-1.0" minWidth="210.0" prefWidth="-1.0" text="Product Name" />
-                                          <TableColumn maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Inventory Level" />
-                                          <TableColumn maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="Price Per Unit" />
+                                          <TableColumn fx:id="tvcProductsPartsId" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Part ID" />
+                                          <TableColumn fx:id="tvcProductsPartsName" maxWidth="-1.0" minWidth="210.0" prefWidth="-1.0" text="Part Name" />
+                                          <TableColumn fx:id="tvcProductsPartsInv" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Inventory Level" />
+                                          <TableColumn fx:id="tvcProductsPartsPrice" maxWidth="-1.0" minWidth="120.0" prefWidth="-1.0" text="Price Per Unit" />
                                        </columns>
                                     </TableView>
                                  </children>
@@ -213,7 +213,7 @@
                                  <children>
                                     <VBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
                                        <children>
-                                          <Button fx:id="btnDeletePart" mnemonicParsing="false" onAction="#onActionDeleteProduct" text="Delete">
+                                          <Button fx:id="btnDeletePartFromProduct" mnemonicParsing="false" onAction="#onActionDeletePartFromProduct" text="Delete">
                                              <font>
                                                 <Font name="Arial" size="13.0" />
                                              </font>

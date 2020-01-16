@@ -1,12 +1,12 @@
+/**
+ *
+ * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
+ */
 package model;
 
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 
-/**
- *
- * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
- */
 public class Inventory {
     
     // Private Members

@@ -1,16 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
+ * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
  */
 package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.ResourceBundle;
-import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,24 +19,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Inventory;
 import model.Part;
 import model.Product;
 
-/**
- * FXML Controller class
- *
- * @author Clint
- */
 public class MainScreenController implements Initializable {
 
     private Stage stage;
@@ -137,7 +126,11 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionExit(ActionEvent event) {
-        Platform.exit();
+        Alert confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to exit the Inventory Manager?", ButtonType.YES, ButtonType.NO);
+            confirmDelete.setTitle("Confirm Exit");
+            confirmDelete.showAndWait().filter(response -> response == ButtonType.YES).ifPresent(response -> {
+                Platform.exit();
+            });
     }
 
     @FXML
@@ -148,12 +141,14 @@ public class MainScreenController implements Initializable {
             tvPartsTable.setItems(partInventorySearch);
             tvPartsTable.refresh();
             btnPartSearch.setText("Clear");
+            tbPartSearch.setDisable(true);
         } else {
             partSearched = false;
             tbPartSearch.setText("");
             btnPartSearch.setText("Search");
             tvPartsTable.setItems(partInventory);
             tvPartsTable.refresh();
+            tbPartSearch.setDisable(false);
         }
 
     }
@@ -175,15 +170,21 @@ public class MainScreenController implements Initializable {
     private void onActionPartModify(ActionEvent event) throws IOException {
         int partToModifyIndex = tvPartsTable.getSelectionModel().getSelectedIndex();
         Part partToModify = tvPartsTable.getSelectionModel().getSelectedItem();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPart.fxml"));
-        controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory, partToModify, partToModifyIndex);
-        loader.setController(modifyPartController);
-        parent = loader.load();
-        scene = new Scene(parent);
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+        if (partToModify != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPart.fxml"));
+            controller.ModifyPartController modifyPartController = new controller.ModifyPartController(imInventory, partToModify, partToModifyIndex);
+            loader.setController(modifyPartController);
+            parent = loader.load();
+            scene = new Scene(parent);
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } else {
+            Alert noPartSelected = new Alert(AlertType.ERROR, "No part selected. Please select a part to delete.", ButtonType.OK);
+            noPartSelected.setTitle("Error - No Part Selected");
+            noPartSelected.showAndWait();
+        };
     }
 
     @FXML
@@ -210,12 +211,14 @@ public class MainScreenController implements Initializable {
             tvProductsTable.setItems(productInventorySearch);
             tvProductsTable.refresh();
             btnProductSearch.setText("Clear");
+            btnProductSearch.setDisable(true);
         } else {
             productSearched = false;
             tbProductSearch.setText("");
             btnProductSearch.setText("Search");
             tvProductsTable.setItems(productInventory);
             tvProductsTable.refresh();
+            btnProductSearch.setDisable(false);
         }
     }
 
@@ -234,15 +237,24 @@ public class MainScreenController implements Initializable {
 
     @FXML
     private void onActionProductModify(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProduct.fxml"));
-        controller.ModifyProductController modifyProductController = new controller.ModifyProductController(imInventory);
-        loader.setController(modifyProductController);
-        parent = loader.load();
-        scene = new Scene(parent);
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
+
+        int productToModifyIndex = tvProductsTable.getSelectionModel().getSelectedIndex();
+        Product productToModify = tvProductsTable.getSelectionModel().getSelectedItem();
+        if (productToModify != null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyProduct.fxml"));
+            controller.ModifyProductController modifyProductController = new controller.ModifyProductController(imInventory, productToModify, productToModifyIndex);
+            loader.setController(modifyProductController);
+            parent = loader.load();
+            scene = new Scene(parent);
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } else {
+            Alert noProductSelected = new Alert(AlertType.ERROR, "No product selected. Please select a product to delete.", ButtonType.OK);
+            noProductSelected.setTitle("Error - No Product Selected");
+            noProductSelected.showAndWait();
+        }
     }
 
     @FXML
@@ -260,5 +272,4 @@ public class MainScreenController implements Initializable {
             noProductSelected.showAndWait();
         };
     }
-
 }

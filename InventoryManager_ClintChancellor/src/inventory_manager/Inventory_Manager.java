@@ -1,7 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ *
+ * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
  */
 package inventory_manager;
 
@@ -17,12 +16,9 @@ import model.Product;
 import model.InHouse;
 import model.Outsourced;
 
-/**
- *
- * @author Clint
- */
 public class Inventory_Manager extends Application {
     
+    // Main starting fuction
     @Override
     public void start(Stage stage) throws Exception {
         Inventory imInventory = new Inventory();
@@ -39,6 +35,7 @@ public class Inventory_Manager extends Application {
         stage.show();
     }
     
+    // Add some test data
     private void addTestData(Inventory _imInventory) {
         //Cylinder Block, Cylinder Head, Cam Shaft, Piston, Carb
         //Create InHouse Data
@@ -103,9 +100,7 @@ public class Inventory_Manager extends Application {
         _imInventory.addProduct(rge);
     }
 
-    /**
-     * @param args the command line arguments
-     */
+    // Main Function
     public static void main(String[] args) {
         launch(args);
     }

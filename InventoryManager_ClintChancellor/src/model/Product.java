@@ -1,35 +1,36 @@
+/**
+ *
+ * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
+ */
 package model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- *
- * @author Clint Chancellor - Inventory Management Program for WGU C482 Course.
- */
 public class Product {
     
     // Private Members
-    private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
     private int id, stock, min, max;
     private String name;
     double price;
     
     // Class Variables
     static int productCount = 10000;
-    
-    // Constructor
-    public Product(int _id, String _name, double _price, int _stock, int _min, int _max) {
-        this.id = _id;
+       
+    // Constructor - excludes id and autoincrements to next id.
+    public Product(String _name, double _price, int _stock, int _min, int _max, ObservableList<Part> _associatedParts) {
+        this.id = getNextProductId();
         this.name = _name;
         this.price = _price;
         this.stock = _stock;
         this.min = _min;
         this.max = _max;
+        this.associatedParts = _associatedParts;
         productCount++;
     }
     
-    // Overloaded Constructor - excludes id and autoincrements to next id.
+    // Overloaded Constructor - excludes associtated parts
     public Product(String _name, double _price, int _stock, int _min, int _max) {
         this.id = getNextProductId();
         this.name = _name;
@@ -97,6 +98,10 @@ public class Product {
     
     public boolean deleteAssociatedPart(Part _selectedAssociatedPart) {
         return associatedParts.remove(_selectedAssociatedPart);
+    }
+    
+    public void setAssociatedParts(ObservableList<Part> _associatedParts) {
+        this.associatedParts = _associatedParts;
     }
     
     public ObservableList<Part> getAllAssociatedParts() {
